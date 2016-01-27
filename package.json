@@ -5,11 +5,12 @@
   "keywords": [
     "couch",
     "couchdb",
+    "build",
+    "builder",
     "design",
     "designer",
     "compile",
-    "build",
-    "builder"
+    "compiler"
   ],
   "homepage": "https://github.com/eloquent/couchdb-builder",
   "bugs": "https://github.com/eloquent/couchdb-builder/issues",

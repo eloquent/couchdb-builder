@@ -1,4 +1,4 @@
-# CouchDB designer changelog
+# CouchDB builder changelog
 
 ## Next release
 

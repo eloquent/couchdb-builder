@@ -1,6 +1,6 @@
 # Contributing
 
-**CouchDB designer** is open source software; contributions from the community are
+**CouchDB builder** is open source software; contributions from the community are
 encouraged. Please take a moment to read these guidelines before submitting
 changes.
 
