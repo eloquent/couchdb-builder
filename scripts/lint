@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+node_modules/.bin/coffeelint src
+node_modules/.bin/coffeelint --file test/coffeelint.json test
