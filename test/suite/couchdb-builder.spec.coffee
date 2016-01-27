@@ -1,4 +1,4 @@
-designer = require '../../src/main'
+designer = require '../../src/couchdb-builder'
 
 describe 'main', ->
 
