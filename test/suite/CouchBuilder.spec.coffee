@@ -7,7 +7,7 @@ describe 'CouchBuilder', ->
 
     describe 'build', ->
 
-        it 'does stuff', (done) ->
+        it 'does stuff', ->
             path = "#{__dirname}/../fixture/file-listing"
             expected = [
                 'directory-a/directory-a-a/file-a-a-a'
@@ -22,7 +22,6 @@ describe 'CouchBuilder', ->
                 'file-b'
             ]
 
-            @subject.build path, (error, actual) ->
-                assert.isNull error
+            return @subject.build path
+            .then (actual) ->
                 assert.deepEqual actual, expected
-                done()

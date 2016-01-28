@@ -1,20 +1,29 @@
+Promise = require 'bluebird'
+
 module.exports = class CouchBuilder
 
     constructor: (@_readdirp = require 'readdirp') ->
 
-    build: (path, callback) ->
-        stream = @_readdirp root: path, entryType: 'files'
-        paths = []
+    build: (path) -> new Promise (resolve, reject) =>
         closeError = null
+        entries = []
 
-        stream.on 'data', (entry) -> paths.push entry.path
+        stream = @_readdirp root: path, entryType: 'files'
+
+        stream.on 'data', (entry) -> entries.push entry
         stream.on 'warn', (error) ->
             closeError = error
             stream.destroy()
-        stream.on 'error', (error) -> callback error
-        stream.on 'end', ->
-            paths.sort()
-            callback null, paths
-        stream.on 'close', -> callback closeError, null
+        stream.on 'error', (error) -> reject error
+        stream.on 'end', =>
+            @_processEntries entries
+            .then (result) -> resolve result
+        stream.on 'close', -> reject closeError
 
         return
+
+    _processEntries: (entries) -> new Promise (resolve, reject) ->
+        paths = (entry.path for entry in entries)
+        paths.sort()
+
+        resolve paths
