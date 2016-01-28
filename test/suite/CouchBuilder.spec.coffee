@@ -1,9 +1,18 @@
+fs = require 'fs'
+
 CouchBuilder = require '../../src/CouchBuilder'
 
 describe 'CouchBuilder', ->
 
     beforeEach ->
-        @subject = new CouchBuilder()
+        @handlers = [
+            (path) -> new Promise (resolve, reject) ->
+                fs.readFile path, (error, data) ->
+                    return reject error if error
+
+                    resolve data.toString()
+        ]
+        @subject = new CouchBuilder @handlers
 
     describe 'build', ->
 
@@ -12,18 +21,18 @@ describe 'CouchBuilder', ->
             expected =
                 'directory-a':
                     'directory-a-a':
-                        'file-a-a-a': 'a-a-a'
-                        'file-a-a-b': 'a-a-b'
+                        'file-a-a-a': "a-a-a\n"
+                        'file-a-a-b': "a-a-b\n"
                     'directory-a-b':
-                        'file-a-b-a': 'a-b-a'
-                        'file-a-b-b': 'a-b-b'
-                    'file-a-a': 'a-a'
-                    'file-a-b': 'a-b'
+                        'file-a-b-a': "a-b-a\n"
+                        'file-a-b-b': "a-b-b\n"
+                    'file-a-a': "a-a\n"
+                    'file-a-b': "a-b\n"
                 'directory-b':
-                    'file-b-a': 'b-a'
-                    'file-b-b': 'b-b'
-                'file-a': 'a'
-                'file-b': 'b'
+                    'file-b-a': "b-a\n"
+                    'file-b-b': "b-b\n"
+                'file-a': "a\n"
+                'file-b': "b\n"
 
             return @subject.build path
             .then (actual) ->
