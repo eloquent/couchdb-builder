@@ -9,16 +9,10 @@ module.exports = class TextHandler
     handle: (filePath) -> new Promise (resolve, reject) =>
         extension = path.extname filePath
 
-        unless extension in @extensions
-            resolve null
-
-            return
+        return resolve null unless extension in @extensions
 
         fs.readFile filePath, (error, data) ->
-            if error
-                reject error
-
-                return
+            return reject error if error
 
             resolve [
                 path.basename filePath, extension

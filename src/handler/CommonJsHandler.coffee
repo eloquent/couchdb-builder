@@ -18,16 +18,10 @@ module.exports = class CommonJsHandler
         '''
 
     handle: (filePath) -> new Promise (resolve, reject) =>
-        if path.extname(filePath) isnt '.js'
-            resolve null
-
-            return
+        return resolve null if path.extname(filePath) isnt '.js'
 
         fs.readFile filePath, (error, data) =>
-            if error
-                reject error
-
-                return
+            return reject error if error
 
             resolve [
                 path.basename filePath, '.js'

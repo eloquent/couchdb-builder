@@ -24,23 +24,17 @@ module.exports = class CouchBuilder
             return
 
         stream.on 'error', (error) ->
-            reject error
-
-            return
+            return reject error
 
         stream.on 'end', =>
             @_processEntries entries
             .then (result) ->
-                resolve result
-
-                return
+                return resolve result
 
             return
 
         stream.on 'close', ->
-            reject closeError
-
-            return
+            return reject closeError
 
         return
 
@@ -64,9 +58,7 @@ module.exports = class CouchBuilder
 
                     @_set result, atoms, results[i][1].toString()
 
-            resolve result
-
-            return
+            return resolve result
 
         return
 
@@ -76,13 +68,9 @@ module.exports = class CouchBuilder
         Promise.all(handler filePath for handler in @handlers)
         .then (results) ->
             for result in results when result?
-                resolve result
+                return resolve result
 
-                return
-
-            resolve null
-
-            return
+            return resolve null
 
         return
 

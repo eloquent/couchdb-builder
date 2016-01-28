@@ -17,23 +17,15 @@ module.exports = class CommonCoffeeHandler
         '''
 
     handle: (filePath) -> new Promise (resolve, reject) =>
-        if path.extname(filePath) isnt '.coffee'
-            resolve null
-
-            return
+        return resolve null if path.extname(filePath) isnt '.coffee'
 
         fs.readFile filePath, (error, data) =>
-            if error
-                reject error
-
-                return
+            return reject error if error
 
             try
                 js = coffee.compile data.toString()
             catch error
-                reject error
-
-                return
+                return reject error
 
             resolve [
                 path.basename filePath, '.coffee'
