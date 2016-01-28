@@ -1,19 +1,25 @@
 path = require 'path'
 Promise = require 'bluebird'
-readdirp = require 'readdirp'
 
 module.exports = class CouchBuilder
 
-    constructor: (@handlers = []) ->
+    constructor: (@handlers = [], @_readdirp = require 'readdirp') ->
 
     build: (root) -> new Promise (resolve, reject) =>
         closeError = null
         entries = []
 
-        stream = readdirp root: root, entryType: 'files'
+        stream = @_readdirp root: root, entryType: 'files'
 
         stream.on 'data', (entry) ->
             entries.push entry
+
+            return
+
+        stream.on 'end', =>
+            @_processEntries entries
+            .then (result) -> return resolve result
+            .catch (error) -> return reject error
 
             return
 
@@ -23,18 +29,8 @@ module.exports = class CouchBuilder
 
             return
 
-        stream.on 'error', (error) ->
-            return reject error
-
-        stream.on 'end', =>
-            @_processEntries entries
-            .then (result) ->
-                return resolve result
-
-            return
-
-        stream.on 'close', ->
-            return reject closeError
+        stream.on 'close', -> return reject closeError
+        stream.on 'error', (error) -> return reject error
 
         return
 
@@ -58,6 +54,7 @@ module.exports = class CouchBuilder
                     @_set result, atoms, results[i][1].toString()
 
             return resolve result
+        .catch (error) -> return reject error
 
         return
 
@@ -66,10 +63,9 @@ module.exports = class CouchBuilder
 
         Promise.all(handler filePath for handler in @handlers)
         .then (results) ->
-            for result in results when result?
-                return resolve result
-
+            return resolve result for result in results when result?
             return resolve null
+        .catch (error) -> return reject error
 
         return
 
