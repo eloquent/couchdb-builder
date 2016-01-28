@@ -32,8 +32,9 @@ describe 'CouchBuilder', ->
                 'directory-b':
                     'file-b-a': "b-a\n"
                     'file-b-b': "b-b\n"
-                'file-a.json': '{"a":1,"b":2}\n'
-                'file-b': "b\n"
+                'file': ''
+                'json.json': '{"a":1,"b":2}\n'
+                'js.js': "var test = 'It works.';\nmodule.exports = function () { return [test, arguments] };\n"
 
             return @subject.build filePath
             .then (actual) ->

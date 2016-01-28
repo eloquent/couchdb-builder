@@ -8,15 +8,15 @@ describe 'JsonHandler', ->
     describe 'handle', ->
 
         it 'resolves to the parsed JSON data for JSON files', ->
-            path = "#{__dirname}/../../fixture/valid/file-a.json"
-            expected = ['file-a', {a: 1, b: 2}]
+            path = "#{__dirname}/../../fixture/valid/json.json"
+            expected = ['json', {a: 1, b: 2}]
 
             return @subject.handle path
             .then (actual) ->
                 assert.deepEqual actual, expected
 
         it 'resolves to null for non-JSON files', ->
-            path = "#{__dirname}/../../fixture/valid/file-b"
+            path = "#{__dirname}/../../fixture/valid/file"
 
             return @subject.handle path
             .then (actual) ->
