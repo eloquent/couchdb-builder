@@ -3,11 +3,10 @@ Promise = require 'bluebird'
 module.exports = class CouchBuilder
 
     constructor: (
-        handlers = []
+        @handlers = []
         @_readdirp = require 'readdirp'
         @_path = require 'path'
     ) ->
-        @handlers = (Promise.method handler for handler in handlers)
 
     build: (path) -> new Promise (resolve, reject) =>
         closeError = null
@@ -61,7 +60,11 @@ module.exports = class CouchBuilder
             result = {}
 
             for entry, i in entries
-                @_set result, entry.path.split(@_path.sep), results[i]
+                if results[i]?
+                    atoms = entry.path.split @_path.sep
+                    atoms[atoms.length - 1] = results[i][0]
+
+                    @_set result, atoms, results[i][1].toString()
 
             resolve result
 

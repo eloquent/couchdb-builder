@@ -1,4 +1,3 @@
 --recursive
 --compilers coffee:coffee-script/register
 --require test/helper/bootstrap
---reporter dot

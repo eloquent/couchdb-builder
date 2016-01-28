@@ -1,4 +1,5 @@
 fs = require 'fs'
+path = require 'path'
 
 CouchBuilder = require '../../src/CouchBuilder'
 
@@ -6,18 +7,18 @@ describe 'CouchBuilder', ->
 
     beforeEach ->
         @handlers = [
-            (path) -> new Promise (resolve, reject) ->
-                fs.readFile path, (error, data) ->
+            (filePath) -> new Promise (resolve, reject) ->
+                fs.readFile filePath, (error, data) ->
                     return reject error if error
 
-                    resolve data.toString()
+                    resolve [path.basename(filePath), data]
         ]
         @subject = new CouchBuilder @handlers
 
     describe 'build', ->
 
         it 'does stuff', ->
-            path = "#{__dirname}/../fixture/file-listing"
+            filePath = "#{__dirname}/../fixture/valid"
             expected =
                 'directory-a':
                     'directory-a-a':
@@ -31,9 +32,9 @@ describe 'CouchBuilder', ->
                 'directory-b':
                     'file-b-a': "b-a\n"
                     'file-b-b': "b-b\n"
-                'file-a': "a\n"
+                'file-a.json': '{"a":1,"b":2}\n'
                 'file-b': "b\n"
 
-            return @subject.build path
+            return @subject.build filePath
             .then (actual) ->
                 assert.deepEqual actual, expected
