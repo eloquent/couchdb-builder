@@ -22,8 +22,21 @@ module.exports = class CouchBuilder
 
         return
 
-    _processEntries: (entries) -> new Promise (resolve, reject) ->
-        paths = (entry.path for entry in entries)
-        paths.sort()
+    _processEntries: (entries) -> new Promise (resolve, reject) =>
+        entries.sort (left, right) ->
+            if left.path < right.path
+                return -1
+            else if left.path > right.path
+                return 1
 
-        resolve paths
+            return 0
+
+        Promise.all(@_processEntry entry for entry in entries)
+        .then (results) -> resolve results
+
+        return
+
+    _processEntry: (entry) -> new Promise (resolve, reject) ->
+        resolve entry.path
+
+        return
