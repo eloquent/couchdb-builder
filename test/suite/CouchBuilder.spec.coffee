@@ -32,6 +32,7 @@ describe 'CouchBuilder', ->
                 'directory-b':
                     'file-b-a': "b-a\n"
                     'file-b-b': "b-b\n"
+                'coffee.coffee': "test = 'It works.'\nmodule.exports = -> [test, arguments]\n"
                 'file': ''
                 'json.json': '{"a":1,"b":2}\n'
                 'js.js': "var test = 'It works.';\nmodule.exports = function () { return [test, arguments] };\n"

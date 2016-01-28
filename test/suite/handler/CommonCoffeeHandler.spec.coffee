@@ -1,25 +1,31 @@
-CommonJsHandler = require '../../../src/handler/CommonJsHandler'
+CommonCoffeeHandler = require '../../../src/handler/CommonCoffeeHandler'
 
-describe 'CommonJsHandler', ->
+describe 'CommonCoffeeHandler', ->
 
     beforeEach ->
-        @subject = new CommonJsHandler()
+        @subject = new CommonCoffeeHandler()
 
     describe 'handle', ->
 
-        it 'resolves to a module wrapper for JavaScript files', ->
-            path = "#{__dirname}/../../fixture/valid/js.js"
+        it 'resolves to a compiled module wrapper for CoffeeScript files', ->
+            path = "#{__dirname}/../../fixture/valid/coffee.coffee"
             expected = [
-                'js'
+                'coffee'
                 '''
                     function () {
                     var module = {};
-                    (function () {
 
-                    var test = 'It works.';
-                    module.exports = function () { return [test, arguments] };
+                    (function() {
+                      var test;
+
+                      test = 'It works.';
+
+                      module.exports = function() {
+                        return [test, arguments];
+                      };
 
                     }).call(this);
+
                     return module.exports.apply(this, arguments);
                     }
                 '''
@@ -29,7 +35,7 @@ describe 'CommonJsHandler', ->
             .then (actual) ->
                 assert.deepEqual actual, expected
 
-        it 'resolves to null for non-JavaScript files', ->
+        it 'resolves to null for non-CoffeeScript files', ->
             path = "#{__dirname}/../../fixture/valid/file"
 
             return @subject.handle path
