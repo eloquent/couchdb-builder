@@ -48,7 +48,7 @@ describe 'CommonCoffeeHandler', ->
             assert.instanceOf actual, SyntaxError
 
     it 'handles file system errors', ->
-        path = "#{__dirname}/../../fixture/invalid/nonexistent.js"
+        path = "#{__dirname}/../../fixture/invalid/nonexistent.coffee"
 
         return @subject.handle path
         .catch (actual) ->
