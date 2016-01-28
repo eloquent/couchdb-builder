@@ -2,7 +2,11 @@ Promise = require 'bluebird'
 
 module.exports = class CouchBuilder
 
-    constructor: (@_readdirp = require 'readdirp') ->
+    constructor: (
+        @_readdirp = require 'readdirp'
+        @_fs = require 'fs'
+        @_path = require 'path'
+    ) ->
 
     build: (path) -> new Promise (resolve, reject) =>
         closeError = null
@@ -52,11 +56,11 @@ module.exports = class CouchBuilder
             return 0
 
         Promise.all(@_processEntry entry for entry in entries)
-        .then (results) ->
+        .then (results) =>
             result = {}
 
             for entry, i in entries
-                result[entry.path] = results[i]
+                @_set result, entry.path.split(@_path.sep), results[i]
 
             resolve result
 
@@ -64,7 +68,27 @@ module.exports = class CouchBuilder
 
         return
 
-    _processEntry: (entry) -> new Promise (resolve, reject) ->
-        resolve entry.path
+    _processEntry: (entry) -> new Promise (resolve, reject) =>
+        @_fs.readFile entry.fullPath, (error, data) ->
+            if error
+                reject error
+
+                return
+
+            resolve data.toString().replace /(?:\r\n|\r|\n)$/, ''
+
+            return
+
+        return
+
+    _set: (object, atoms, value) ->
+        atomCount = atoms.length
+        atom = atoms.shift()
+
+        if atomCount is 1
+            object[atom] = value
+        else
+            object[atom] ?= {}
+            @_set object[atom], atoms, value
 
         return
