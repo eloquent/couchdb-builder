@@ -1,5 +1,6 @@
 fs = require 'fs'
 path = require 'path'
+Promise = require 'bluebird'
 
 CouchBuilder = require '../../src/CouchBuilder'
 
