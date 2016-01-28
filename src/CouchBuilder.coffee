@@ -10,15 +10,35 @@ module.exports = class CouchBuilder
 
         stream = @_readdirp root: path, entryType: 'files'
 
-        stream.on 'data', (entry) -> entries.push entry
+        stream.on 'data', (entry) ->
+            entries.push entry
+
+            return
+
         stream.on 'warn', (error) ->
             closeError = error
             stream.destroy()
-        stream.on 'error', (error) -> reject error
+
+            return
+
+        stream.on 'error', (error) ->
+            reject error
+
+            return
+
         stream.on 'end', =>
             @_processEntries entries
-            .then (result) -> resolve result
-        stream.on 'close', -> reject closeError
+            .then (result) ->
+                resolve result
+
+                return
+
+            return
+
+        stream.on 'close', ->
+            reject closeError
+
+            return
 
         return
 
@@ -32,7 +52,15 @@ module.exports = class CouchBuilder
             return 0
 
         Promise.all(@_processEntry entry for entry in entries)
-        .then (results) -> resolve results
+        .then (results) ->
+            result = {}
+
+            for entry, i in entries
+                result[entry.path] = results[i]
+
+            resolve result
+
+            return
 
         return
 
