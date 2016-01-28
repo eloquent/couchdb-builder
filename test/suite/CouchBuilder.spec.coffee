@@ -8,30 +8,40 @@ describe 'CouchBuilder', ->
     beforeEach ->
         @handlers = [
             (filePath) -> new Promise (resolve, reject) ->
+                return resolve null unless path.basename(filePath).match /^file-a/
+
                 fs.readFile filePath, (error, data) ->
                     return reject error if error
 
-                    resolve [path.basename(filePath), data]
+                    resolve [path.basename(filePath), "(handler a) #{data.toString()}"]
+
+            (filePath) -> new Promise (resolve, reject) ->
+                return resolve null unless path.basename(filePath).match /^file-b/
+
+                fs.readFile filePath, (error, data) ->
+                    return reject error if error
+
+                    resolve [path.basename(filePath), "(handler b) #{data.toString()}"]
         ]
         @subject = new CouchBuilder @handlers
 
-    it 'builds a result using the supplied handlers', ->
+    it 'builds a result using the correct handlers', ->
         filePath = "#{__dirname}/../fixture/tree"
         expected =
             'directory-a':
                 'directory-a-a':
-                    'file-a-a-a': "a-a-a\n"
-                    'file-a-a-b': "a-a-b\n"
+                    'file-a-a-a': '(handler a) a-a-a\n'
+                    'file-a-a-b': '(handler a) a-a-b\n'
                 'directory-a-b':
-                    'file-a-b-a': "a-b-a\n"
-                    'file-a-b-b': "a-b-b\n"
-                'file-a-a': "a-a\n"
-                'file-a-b': "a-b\n"
+                    'file-a-b-a': '(handler a) a-b-a\n'
+                    'file-a-b-b': '(handler a) a-b-b\n'
+                'file-a-a': '(handler a) a-a\n'
+                'file-a-b': '(handler a) a-b\n'
             'directory-b':
-                'file-b-a': "b-a\n"
-                'file-b-b': "b-b\n"
-            'file-a': 'a\n'
-            'file-b': 'b\n'
+                'file-b-a': '(handler b) b-a\n'
+                'file-b-b': '(handler b) b-b\n'
+            'file-a': '(handler a) a\n'
+            'file-b': '(handler b) b\n'
 
         return @subject.build filePath
         .then (actual) ->
