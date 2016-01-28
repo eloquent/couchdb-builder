@@ -6,7 +6,7 @@ describe 'CommonJsHandler', ->
         @subject = new CommonJsHandler()
 
     it 'resolves to a module wrapper for JavaScript files', ->
-        path = "#{__dirname}/../../fixture/valid/js.js"
+        path = "#{__dirname}/../../fixture/handler/js.js"
         expected = [
             'js'
             '''
@@ -28,7 +28,7 @@ describe 'CommonJsHandler', ->
             assert.deepEqual actual, expected
 
     it 'resolves to null for non-JavaScript files', ->
-        path = "#{__dirname}/../../fixture/valid/other.other"
+        path = "#{__dirname}/../../fixture/handler/other.other"
 
         return @subject.handle path
         .then (actual) ->

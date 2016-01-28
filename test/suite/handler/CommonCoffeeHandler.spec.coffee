@@ -6,7 +6,7 @@ describe 'CommonCoffeeHandler', ->
         @subject = new CommonCoffeeHandler()
 
     it 'resolves to a compiled module wrapper for CoffeeScript files', ->
-        path = "#{__dirname}/../../fixture/valid/coffee.coffee"
+        path = "#{__dirname}/../../fixture/handler/coffee.coffee"
         expected = [
             'coffee'
             '''
@@ -34,7 +34,7 @@ describe 'CommonCoffeeHandler', ->
             assert.deepEqual actual, expected
 
     it 'resolves to null for non-CoffeeScript files', ->
-        path = "#{__dirname}/../../fixture/valid/other.other"
+        path = "#{__dirname}/../../fixture/handler/other.other"
 
         return @subject.handle path
         .then (actual) ->

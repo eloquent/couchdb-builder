@@ -6,7 +6,7 @@ describe 'TextHandler', ->
         @subject = new TextHandler()
 
     it 'resolves to the data for files without an extension', ->
-        path = "#{__dirname}/../../fixture/valid/no-extension"
+        path = "#{__dirname}/../../fixture/handler/no-extension"
         expected = ['no-extension', 'no extension']
 
         return @subject.handle path
@@ -14,7 +14,7 @@ describe 'TextHandler', ->
             assert.deepEqual actual, expected
 
     it 'resolves to the data for text files', ->
-        path = "#{__dirname}/../../fixture/valid/txt.txt"
+        path = "#{__dirname}/../../fixture/handler/txt.txt"
         expected = ['txt', 'text']
 
         return @subject.handle path
@@ -22,7 +22,7 @@ describe 'TextHandler', ->
             assert.deepEqual actual, expected
 
     it 'resolves to null for non-text files', ->
-        path = "#{__dirname}/../../fixture/valid/other.other"
+        path = "#{__dirname}/../../fixture/handler/other.other"
 
         return @subject.handle path
         .then (actual) ->

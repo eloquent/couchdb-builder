@@ -15,30 +15,24 @@ describe 'CouchBuilder', ->
         ]
         @subject = new CouchBuilder @handlers
 
-    describe 'build', ->
+    it 'builds a result using the supplied handlers', ->
+        filePath = "#{__dirname}/../fixture/tree"
+        expected =
+            'directory-a':
+                'directory-a-a':
+                    'file-a-a-a': "a-a-a\n"
+                    'file-a-a-b': "a-a-b\n"
+                'directory-a-b':
+                    'file-a-b-a': "a-b-a\n"
+                    'file-a-b-b': "a-b-b\n"
+                'file-a-a': "a-a\n"
+                'file-a-b': "a-b\n"
+            'directory-b':
+                'file-b-a': "b-a\n"
+                'file-b-b': "b-b\n"
+            'file-a': 'a\n'
+            'file-b': 'b\n'
 
-        it 'does stuff', ->
-            filePath = "#{__dirname}/../fixture/valid"
-            expected =
-                'directory-a':
-                    'directory-a-a':
-                        'file-a-a-a': "a-a-a\n"
-                        'file-a-a-b': "a-a-b\n"
-                    'directory-a-b':
-                        'file-a-b-a': "a-b-a\n"
-                        'file-a-b-b': "a-b-b\n"
-                    'file-a-a': "a-a\n"
-                    'file-a-b': "a-b\n"
-                'directory-b':
-                    'file-b-a': "b-a\n"
-                    'file-b-b': "b-b\n"
-                'coffee.coffee': "test = 'It works.'\nmodule.exports = -> [test, arguments]\n"
-                'js.js': "var test = 'It works.';\nmodule.exports = function () { return [test, arguments] };\n"
-                'json.json': '{"a":1,"b":2}\n'
-                'no-extension': 'no extension\n'
-                'other.other': 'other\n'
-                'txt.txt': 'text\n'
-
-            return @subject.build filePath
-            .then (actual) ->
-                assert.deepEqual actual, expected
+        return @subject.build filePath
+        .then (actual) ->
+            assert.deepEqual actual, expected
