@@ -28,9 +28,16 @@ module.exports = class CommonCoffeeHandler
 
                 return
 
+            try
+                js = coffee.compile data.toString()
+            catch error
+                reject error
+
+                return
+
             resolve [
                 path.basename filePath, '.coffee'
-                util.format @template, coffee.compile data.toString()
+                util.format @template, js
             ]
 
             return

@@ -5,46 +5,51 @@ describe 'CommonCoffeeHandler', ->
     beforeEach ->
         @subject = new CommonCoffeeHandler()
 
-    describe 'handle', ->
+    it 'resolves to a compiled module wrapper for CoffeeScript files', ->
+        path = "#{__dirname}/../../fixture/valid/coffee.coffee"
+        expected = [
+            'coffee'
+            '''
+                function () {
+                var module = {};
 
-        it 'resolves to a compiled module wrapper for CoffeeScript files', ->
-            path = "#{__dirname}/../../fixture/valid/coffee.coffee"
-            expected = [
-                'coffee'
-                '''
-                    function () {
-                    var module = {};
+                (function() {
+                  var test;
 
-                    (function() {
-                      var test;
+                  test = 'It works.';
 
-                      test = 'It works.';
+                  module.exports = function() {
+                    return [test, arguments];
+                  };
 
-                      module.exports = function() {
-                        return [test, arguments];
-                      };
+                }).call(this);
 
-                    }).call(this);
+                return module.exports.apply(this, arguments);
+                }
+            '''
+        ]
 
-                    return module.exports.apply(this, arguments);
-                    }
-                '''
-            ]
+        return @subject.handle path
+        .then (actual) ->
+            assert.deepEqual actual, expected
 
-            return @subject.handle path
-            .then (actual) ->
-                assert.deepEqual actual, expected
+    it 'resolves to null for non-CoffeeScript files', ->
+        path = "#{__dirname}/../../fixture/valid/other.other"
 
-        it 'resolves to null for non-CoffeeScript files', ->
-            path = "#{__dirname}/../../fixture/valid/file"
+        return @subject.handle path
+        .then (actual) ->
+            assert.isNull actual
 
-            return @subject.handle path
-            .then (actual) ->
-                assert.isNull actual
+    it 'handles invalid CoffeeScript data', ->
+        path = "#{__dirname}/../../fixture/invalid/coffee.coffee"
 
-        it 'handles file system errors', ->
-            path = "#{__dirname}/../../fixture/invalid/nonexistent.js"
+        return @subject.handle path
+        .catch (actual) ->
+            assert.instanceOf actual, SyntaxError
 
-            return @subject.handle path
-            .catch (actual) ->
-                assert.instanceOf actual, Error
+    it 'handles file system errors', ->
+        path = "#{__dirname}/../../fixture/invalid/nonexistent.js"
+
+        return @subject.handle path
+        .catch (actual) ->
+            assert.instanceOf actual, Error
