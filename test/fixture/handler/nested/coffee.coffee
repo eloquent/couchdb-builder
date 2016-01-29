@@ -1,2 +1,2 @@
 test = 'It works.'
-module.exports = -> [test, arguments]
+module.exports = -> [test, Array.prototype.slice.call(arguments)]

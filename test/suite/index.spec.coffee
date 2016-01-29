@@ -16,7 +16,7 @@ describe 'Module', ->
               test = 'It works.';
 
               module.exports = function() {
-                return [test, arguments];
+                return [test, Array.prototype.slice.call(arguments)];
               };
 
             }).call(this);
@@ -30,7 +30,7 @@ describe 'Module', ->
             (function () {
 
             var test = 'It works.';
-            module.exports = function () { return [test, arguments] };
+            module.exports = function () { return [test, Array.prototype.slice.call(arguments)] };
 
             }).call(this);
             return module.exports.apply(this, arguments);

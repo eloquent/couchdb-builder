@@ -1,3 +1,5 @@
+fs = require 'fs'
+
 CommonCoffeeHandler = require '../../../src/handler/CommonCoffeeHandler'
 HandlerError = require '../../../src/handler/error/HandlerError'
 
@@ -6,8 +8,10 @@ describe 'CommonCoffeeHandler', ->
     beforeEach ->
         @subject = new CommonCoffeeHandler()
 
+        @filePath = "#{__dirname}/../../fixture/handler/coffee.coffee"
+        @tmpPath = "#{__dirname}/../../fixture/tmp"
+
     it 'resolves to a compiled module wrapper for CoffeeScript files', ->
-        path = "#{__dirname}/../../fixture/handler/coffee.coffee"
         expected = [
             'coffee'
             '''
@@ -20,7 +24,7 @@ describe 'CommonCoffeeHandler', ->
                   test = 'It works.';
 
                   module.exports = function() {
-                    return [test, arguments];
+                    return [test, Array.prototype.slice.call(arguments)];
                   };
 
                 }).call(this);
@@ -30,9 +34,17 @@ describe 'CommonCoffeeHandler', ->
             '''
         ]
 
-        return @subject.handleFile path
+        return @subject.handleFile @filePath
         .then (actual) ->
             assert.deepEqual actual, expected
+
+    it 'produces code that will work with CouchDB', ->
+        return @subject.handleFile @filePath
+        .then (actual) =>
+            fs.writeFileSync @tmpPath, "module.exports = #{actual[1]};"
+            actual = (require @tmpPath) 'a', 'b'
+
+            assert.deepEqual actual, ['It works.', ['a', 'b']]
 
     it 'resolves to null for non-CoffeeScript files', ->
         path = "#{__dirname}/../../fixture/handler/other.other"
@@ -54,3 +66,4 @@ describe 'CommonCoffeeHandler', ->
         return @subject.handleFile path
         .catch (actual) ->
             assert.instanceOf actual, HandlerError
+
