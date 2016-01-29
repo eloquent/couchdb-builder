@@ -10,7 +10,7 @@ module.exports = class CommonCoffeeHandler
     constructor: (@template) ->
         @template ?= '''
             (function () {
-            if (!module) { var module = {}; }
+            if (!module) { module = {}; }
 
             %s
             return module.exports;
