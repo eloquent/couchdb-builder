@@ -10,11 +10,9 @@ module.exports = class CommonCoffeeHandler
     constructor: (@template) ->
         @template ?= '''
             if (!module) { var module = {}; }
-            (function () {
 
             %s
-            return module.exports;
-            }).call(this);
+            module.exports;
         '''
 
     handleFile: (filePath) => new Promise (resolve, reject) =>

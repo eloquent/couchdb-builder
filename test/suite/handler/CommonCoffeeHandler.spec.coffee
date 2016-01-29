@@ -16,7 +16,6 @@ describe 'CommonCoffeeHandler', ->
             'coffee'
             '''
                 if (!module) { var module = {}; }
-                (function () {
 
                 var test;
 
@@ -26,8 +25,7 @@ describe 'CommonCoffeeHandler', ->
                   return [test, Array.prototype.slice.call(arguments)];
                 };
 
-                return module.exports;
-                }).call(this);
+                module.exports;
             '''
         ]
 
