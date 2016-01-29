@@ -8,14 +8,8 @@ HandlerError = require './error/HandlerError'
 module.exports = class CommonCoffeeHandler
 
     constructor: (@template) ->
-        @template ?= '''
-            function () {
-            var module = {};
-
-            %s
-            return module.exports.apply(this, arguments);
-            }
-        '''
+        @template ?=
+            "(function () {\n\n%s\nreturn module.exports;\n}).call(this);"
 
     handleFile: (filePath) => new Promise (resolve, reject) =>
         return resolve null if path.extname(filePath) isnt '.coffee'
@@ -29,7 +23,7 @@ module.exports = class CommonCoffeeHandler
             coffee = require 'coffee-script'
 
             try
-                js = coffee.compile data.toString()
+                js = coffee.compile data.toString(), bare: true
             catch error
                 error = new HandlerError 'CommonCoffeeHandler', filePath, error
 

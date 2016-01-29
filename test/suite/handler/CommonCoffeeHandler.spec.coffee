@@ -1,5 +1,3 @@
-fs = require 'fs'
-
 CommonCoffeeHandler = require '../../../src/handler/CommonCoffeeHandler'
 HandlerError = require '../../../src/handler/error/HandlerError'
 
@@ -15,22 +13,18 @@ describe 'CommonCoffeeHandler', ->
         expected = [
             'coffee'
             '''
-                function () {
-                var module = {};
+                (function () {
 
-                (function() {
-                  var test;
+                var test;
 
-                  test = 'It works.';
+                test = 'It works.';
 
-                  module.exports = function() {
-                    return [test, Array.prototype.slice.call(arguments)];
-                  };
+                module.exports = function() {
+                  return [test, Array.prototype.slice.call(arguments)];
+                };
 
+                return module.exports;
                 }).call(this);
-
-                return module.exports.apply(this, arguments);
-                }
             '''
         ]
 
@@ -41,8 +35,7 @@ describe 'CommonCoffeeHandler', ->
     it 'produces code that will work with CouchDB', ->
         return @subject.handleFile @filePath
         .then (actual) =>
-            fs.writeFileSync @tmpPath, "module.exports = #{actual[1]};"
-            actual = (require @tmpPath) 'a', 'b'
+            actual = (eval actual[1])('a', 'b');
 
             assert.deepEqual actual, ['It works.', ['a', 'b']]
 

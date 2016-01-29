@@ -7,34 +7,27 @@ describe 'Module', ->
 
     it 'builds a result using the correct handlers', ->
         expectedCoffee = '''
-            function () {
-            var module = {};
+            (function () {
 
-            (function() {
-              var test;
+            var test;
 
-              test = 'It works.';
+            test = 'It works.';
 
-              module.exports = function() {
-                return [test, Array.prototype.slice.call(arguments)];
-              };
+            module.exports = function() {
+              return [test, Array.prototype.slice.call(arguments)];
+            };
 
+            return module.exports;
             }).call(this);
-
-            return module.exports.apply(this, arguments);
-            }
         '''
         expectedJs = '''
-            function () {
-            var module = {};
             (function () {
 
             var test = 'It works.';
             module.exports = function () { return [test, Array.prototype.slice.call(arguments)] };
 
+            return module.exports;
             }).call(this);
-            return module.exports.apply(this, arguments);
-            }
         '''
         expected =
             'coffee': expectedCoffee
