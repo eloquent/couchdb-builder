@@ -4,7 +4,7 @@ Promise = require 'bluebird'
 
 module.exports = class JsonHandler
 
-    handle: (filePath) -> new Promise (resolve, reject) ->
+    handleFile: (filePath) -> new Promise (resolve, reject) ->
         return resolve null if path.extname(filePath) isnt '.json'
 
         fs.readFile filePath, (error, json) ->

@@ -51,7 +51,7 @@ module.exports = class CouchBuilder
                     atoms = entry.path.split path.sep
                     atoms[atoms.length - 1] = results[i][0]
 
-                    @_set result, atoms, results[i][1].toString()
+                    @_set result, atoms, results[i][1]
 
             return resolve result
         .catch (error) -> return reject error
@@ -61,7 +61,7 @@ module.exports = class CouchBuilder
     _processPath: (filePath) -> new Promise (resolve, reject) =>
         promises = []
 
-        Promise.all(handler filePath for handler in @handlers)
+        Promise.all(handler.handleFile filePath for handler in @handlers)
         .then (results) ->
             return resolve result for result in results when result?
             return resolve null

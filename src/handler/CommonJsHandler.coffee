@@ -17,7 +17,7 @@ module.exports = class CommonJsHandler
             }
         '''
 
-    handle: (filePath) -> new Promise (resolve, reject) =>
+    handleFile: (filePath) => new Promise (resolve, reject) =>
         return resolve null if path.extname(filePath) isnt '.js'
 
         fs.readFile filePath, (error, data) =>

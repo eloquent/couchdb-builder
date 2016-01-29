@@ -7,7 +7,7 @@ CouchBuilder = require '../../src/CouchBuilder'
 describe 'CouchBuilder', ->
 
     beforeEach ->
-        @handlerA = (filePath) -> new Promise (resolve, reject) ->
+        @handlerA = handleFile: (filePath) -> new Promise (resolve, reject) ->
             return resolve null unless path.basename(filePath).match /^file-a/
 
             fs.readFile filePath, (error, data) ->
@@ -15,7 +15,7 @@ describe 'CouchBuilder', ->
 
                 resolve [path.basename(filePath), "(handler a) #{data.toString()}"]
 
-        @handlerB = (filePath) -> new Promise (resolve, reject) ->
+        @handlerB = handleFile: (filePath) -> new Promise (resolve, reject) ->
             return resolve null unless path.basename(filePath).match /^file-b/
 
             fs.readFile filePath, (error, data) ->
@@ -55,7 +55,7 @@ describe 'CouchBuilder', ->
 
         beforeEach ->
             @error = 'error'
-            @handlerX = (filePath) => new Promise (resolve, reject) =>
+            @handlerX = handleFile: (filePath) => new Promise (resolve, reject) =>
                 return reject @error
             @subject = new CouchBuilder [@handlerA, @handlerX]
 

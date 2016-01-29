@@ -6,7 +6,7 @@ module.exports = class TextHandler
 
     constructor: (@extensions = ['', '.txt']) ->
 
-    handle: (filePath) -> new Promise (resolve, reject) =>
+    handleFile: (filePath) => new Promise (resolve, reject) =>
         extension = path.extname filePath
 
         return resolve null unless extension in @extensions

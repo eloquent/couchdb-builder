@@ -23,20 +23,20 @@ describe 'CommonJsHandler', ->
             '''
         ]
 
-        return @subject.handle path
+        return @subject.handleFile path
         .then (actual) ->
             assert.deepEqual actual, expected
 
     it 'resolves to null for non-JavaScript files', ->
         path = "#{__dirname}/../../fixture/handler/other.other"
 
-        return @subject.handle path
+        return @subject.handleFile path
         .then (actual) ->
             assert.isNull actual
 
     it 'handles file system errors', ->
         path = "#{__dirname}/../../fixture/invalid/nonexistent.js"
 
-        return @subject.handle path
+        return @subject.handleFile path
         .catch (actual) ->
             assert.instanceOf actual, Error

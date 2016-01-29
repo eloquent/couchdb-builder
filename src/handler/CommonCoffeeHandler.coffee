@@ -16,7 +16,7 @@ module.exports = class CommonCoffeeHandler
             }
         '''
 
-    handle: (filePath) -> new Promise (resolve, reject) =>
+    handleFile: (filePath) => new Promise (resolve, reject) =>
         return resolve null if path.extname(filePath) isnt '.coffee'
 
         fs.readFile filePath, (error, data) =>
