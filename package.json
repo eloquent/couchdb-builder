@@ -21,7 +21,7 @@
     "email": "ezzatron@gmail.com",
     "url": "http://ezzatron.com/"
   },
-  "main": "lib/couchdb-builder.js",
+  "main": "lib/index.js",
   "bin": {
     "couchdb-builder": "bin/couchdb-builder"
   },
