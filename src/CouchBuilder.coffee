@@ -36,11 +36,7 @@ module.exports = class CouchBuilder
 
     _processEntries: (entries) -> new Promise (resolve, reject) =>
         entries.sort (left, right) ->
-            return -1 if left.path < right.path
-            return 1 if left.path > right.path
-
-            ### !pragma coverage-skip-next ###
-            return 0 # should never get two identical paths
+            return if left.path < right.path then -1 else 1
 
         Promise.all(@_processPath entry.fullPath for entry in entries)
         .then (results) =>

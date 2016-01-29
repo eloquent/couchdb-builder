@@ -1,4 +1,3 @@
-coffee = require 'coffee-script'
 fs = require 'fs'
 path = require 'path'
 Promise = require 'bluebird'
@@ -26,6 +25,8 @@ module.exports = class CommonCoffeeHandler
                 error = new HandlerError 'CommonCoffeeHandler', filePath, error
 
                 return reject error
+
+            coffee = require 'coffee-script'
 
             try
                 js = coffee.compile data.toString()
