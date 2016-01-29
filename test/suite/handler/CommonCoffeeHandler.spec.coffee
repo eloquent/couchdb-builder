@@ -14,6 +14,7 @@ describe 'CommonCoffeeHandler', ->
             'coffee'
             '''
                 (function () {
+                if (!module) { var module = {}; }
 
                 var test;
 

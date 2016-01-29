@@ -8,8 +8,14 @@ HandlerError = require './error/HandlerError'
 module.exports = class CommonJsHandler
 
     constructor: (@template) ->
-        @template ?=
-            "(function () {\n\n%s\nreturn module.exports;\n}).call(this);"
+        @template ?= '''
+            (function () {
+            if (!module) { var module = {}; }
+
+            %s
+            return module.exports;
+            }).call(this);
+        '''
 
     handleFile: (filePath) => new Promise (resolve, reject) =>
         return resolve null if path.extname(filePath) isnt '.js'

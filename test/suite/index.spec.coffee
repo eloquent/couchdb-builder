@@ -8,6 +8,7 @@ describe 'Module', ->
     it 'builds a result using the correct handlers', ->
         expectedCoffee = '''
             (function () {
+            if (!module) { var module = {}; }
 
             var test;
 
@@ -22,6 +23,7 @@ describe 'Module', ->
         '''
         expectedJs = '''
             (function () {
+            if (!module) { var module = {}; }
 
             var test = 'It works.';
             module.exports = function () { return [test, Array.prototype.slice.call(arguments)] };

@@ -14,6 +14,7 @@ describe 'CommonJsHandler', ->
             'js'
             '''
                 (function () {
+                if (!module) { var module = {}; }
 
                 var test = 'It works.';
                 module.exports = function () { return [test, Array.prototype.slice.call(arguments)] };
