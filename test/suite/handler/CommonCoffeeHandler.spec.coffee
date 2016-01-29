@@ -15,8 +15,8 @@ describe 'CommonCoffeeHandler', ->
         expected = [
             'coffee'
             '''
+                if (!module) { var module = {}; }
                 (function () {
-                if (!module) { module = {}; }
 
                 var test;
 

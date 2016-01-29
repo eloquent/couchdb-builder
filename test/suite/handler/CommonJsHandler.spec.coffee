@@ -15,8 +15,8 @@ describe 'CommonJsHandler', ->
         expected = [
             'js'
             '''
+                if (!module) { var module = {}; }
                 (function () {
-                if (!module) { module = {}; }
 
                 var test = 'It works.';
                 module.exports = function () { return [test, Array.prototype.slice.call(arguments)] };

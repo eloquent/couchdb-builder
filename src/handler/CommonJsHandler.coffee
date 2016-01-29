@@ -9,8 +9,8 @@ module.exports = class CommonJsHandler
 
     constructor: (@template) ->
         @template ?= '''
+            if (!module) { var module = {}; }
             (function () {
-            if (!module) { module = {}; }
 
             %s
             return module.exports;
