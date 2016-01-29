@@ -1,3 +1,4 @@
+HandlerError = require '../../../src/handler/error/HandlerError'
 TextHandler = require '../../../src/handler/TextHandler'
 
 describe 'TextHandler', ->
@@ -33,4 +34,4 @@ describe 'TextHandler', ->
 
         return @subject.handleFile path
         .catch (actual) ->
-            assert.instanceOf actual, Error
+            assert.instanceOf actual, HandlerError

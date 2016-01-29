@@ -2,6 +2,8 @@ fs = require 'fs'
 path = require 'path'
 Promise = require 'bluebird'
 
+HandlerError = require './error/HandlerError'
+
 module.exports = class TextHandler
 
     constructor: (@extensions = ['', '.txt']) ->
@@ -12,7 +14,10 @@ module.exports = class TextHandler
         return resolve null unless extension in @extensions
 
         fs.readFile filePath, (error, data) ->
-            return reject error if error
+            if error
+                error = new HandlerError 'TextHandler', filePath, error
+
+                return reject error
 
             resolve [
                 path.basename filePath, extension

@@ -1,4 +1,5 @@
 CommonJsHandler = require '../../../src/handler/CommonJsHandler'
+HandlerError = require '../../../src/handler/error/HandlerError'
 
 describe 'CommonJsHandler', ->
 
@@ -39,4 +40,4 @@ describe 'CommonJsHandler', ->
 
         return @subject.handleFile path
         .catch (actual) ->
-            assert.instanceOf actual, Error
+            assert.instanceOf actual, HandlerError

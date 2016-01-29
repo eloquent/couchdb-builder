@@ -1,3 +1,4 @@
+HandlerError = require '../../../src/handler/error/HandlerError'
 JsonHandler = require '../../../src/handler/JsonHandler'
 
 describe 'JsonHandler', ->
@@ -25,11 +26,11 @@ describe 'JsonHandler', ->
 
         return @subject.handleFile path
         .catch (actual) ->
-            assert.instanceOf actual, SyntaxError
+            assert.instanceOf actual, HandlerError
 
     it 'handles file system errors', ->
         path = "#{__dirname}/../../fixture/invalid/nonexistent.json"
 
         return @subject.handleFile path
         .catch (actual) ->
-            assert.instanceOf actual, Error
+            assert.instanceOf actual, HandlerError

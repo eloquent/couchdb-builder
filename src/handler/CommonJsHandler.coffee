@@ -3,6 +3,8 @@ path = require 'path'
 Promise = require 'bluebird'
 util = require 'util'
 
+HandlerError = require './error/HandlerError'
+
 module.exports = class CommonJsHandler
 
     constructor: (@template) ->
@@ -21,7 +23,10 @@ module.exports = class CommonJsHandler
         return resolve null if path.extname(filePath) isnt '.js'
 
         fs.readFile filePath, (error, data) =>
-            return reject error if error
+            if error
+                error = new HandlerError 'CommonJsHandler', filePath, error
+
+                return reject error
 
             resolve [
                 path.basename filePath, '.js'
