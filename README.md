@@ -91,19 +91,19 @@ Given the following directory structure and file contents:
         └── view-b/
             └── map.coffee
 
-*a/b*:
+**a/b**:
 
 ```
 String content A.
 ```
 
-*a/c.txt*:
+**a/c.txt**:
 
 ```
 String content B.
 ```
 
-*a/d.json*:
+**a/d.json**:
 
 ```json
 {
@@ -112,13 +112,13 @@ String content B.
 }
 ```
 
-*a/e.other*:
+**a/e.other**:
 
 ```
 Ignored
 ```
 
-*views/view-a/map.js*:
+**views/view-a/map.js**:
 
 ```js
 module.exports = function (doc) {
@@ -126,7 +126,7 @@ module.exports = function (doc) {
 };
 ```
 
-*views/view-b/map.coffee*:
+**views/view-b/map.coffee**:
 
 ```coffee
 module.exports = (doc) ->
