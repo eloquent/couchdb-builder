@@ -27,3 +27,90 @@ npm install --save couchdb-builder
 [couchdb-builder]: https://www.npmjs.com/package/couchdb-builder
 
 -->
+
+## What does it do?
+
+*CouchDB builder* recursively reads a directory of flat files in various
+formats, and builds a JSON document suitable for use with CouchDB. The most
+common application is for CouchDB design documents, that typically contain
+embedded code.
+
+## Differences to [couchdb-compile]
+
+### Better support for CommonJS modules
+
+Module support in [couchdb-compile] involves using [`.toString()`] on the
+module's exports. This does not mix well with some common patterns of CommonJS
+modules. Take the following module as an example:
+
+```js
+var a = 'a';
+
+module.exports = function () {
+    return a;
+};
+```
+
+Using [`.toString()`] on this module would result in the following code:
+
+```js
+function () {
+    return a;
+};
+```
+
+Unfortunately, when this code is executed inside CouchDB, the variable `a` will
+be `undefined`, and hence the behavior has changed from the original module.
+
+*CouchDB builder* takes a different approach, and instead surrounds the original
+source code in a light-weight wrapper. This wrapper allows the original code to
+function identically when used inside CouchDB, and when `require`'d as a
+CommonJS module.
+
+The same module would look something like this when surrounded in the wrapper:
+
+```js
+if (!module) { var module = {}; }
+
+var a = 'a';
+
+module.exports = function () {
+    return a;
+};
+
+module.exports;
+```
+
+This works because CouchDB internally uses [`eval()`], which returns the value
+of the last expression evaluated (i.e. `module.exports`).
+
+[`.tostring()`]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Function/toString
+[`eval()`]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/eval
+
+### Built-in support for CoffeeScript
+
+CoffeeScript is not directly supported by [couchdb-compile], although there is
+currently an open [pull request] designed to address this.
+
+With *CouchDB builder*, CoffeeScript is automatically compiled to JavaScript,
+then surrounded with the same light-weight wrapper as any other JavaScript file.
+This means that CoffeeScript "just works" without any special configuration.
+
+Although CouchDB *does* natively support CoffeeScript, it currently seems to
+re-compile on every execution. It is almost certainly more performant to compile
+once (it also simplifies the wrapper code).
+
+[pull request]: https://github.com/jo/couchdb-compile/pull/29
+
+### Unsupported features
+
+The following features of [couchdb-compile] are not currently supported. Please
+open an issue if further discussion is warranted:
+
+- Attachments.
+- Automatic generation of the `_id` key. If no `_id` is specified, the document
+  will not have one.
+- Special treatment of `index.js` or `index.coffee` files as CommonJS modules.
+  All `.js` and `.coffee` files are treated as modules in *CouchDB builder*.
+
+[couchdb-compile]: https://github.com/jo/couchdb-compile
