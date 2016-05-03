@@ -225,7 +225,7 @@ once (it also simplifies the wrapper code).
 
 [pull request]: https://github.com/jo/couchdb-compile/pull/29
 
-### Idempotent output
+### Deterministic output
 
 When generating JSON output, [couchdb-compile] internally uses [JSON.stringify],
 which does not guarantee the order of properties in the output. If the resulting
@@ -234,7 +234,8 @@ JSON is committed to a version control repository, this will sometimes produce
 meaningful way).
 
 *CouchDB builder* utilizes [json-stable-stringify] instead of [JSON.stringify],
-to ensure that its output is idempotent (always the same, given the same input).
+to ensure that its output is deterministic (always the same, given the same
+input).
 
 [json-stable-stringify]: https://github.com/substack/json-stable-stringify
 
