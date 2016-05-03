@@ -47,28 +47,16 @@ embedded code.
 
 ```js
 var couchdbBuilder = require('couchdb-builder');
-var fs = require('fs');
-var jsonStringify = require('json-stable-stringify');
 
 couchdbBuilder.build(sourcePath).then(
     function (result) {
-        fs.writeFile(
-            targetPath,
-            jsonStringify(result) + "\n",
-            function (e) {
-                console.error('Error writing file: ' + e);
-            }
-        );
+        // handle result
     },
-    function (e) {
-        console.error('Error building document: ' + e);
+    function (error) {
+        // handle error
     }
 );
 ```
-
-Note that [json-stable-stringify] is used instead of [JSON.stringify] to ensure
-idempotent output, which helps reduce diff churn when the build product is
-committed to a version control repository.
 
 [promise]: https://promisesaplus.com/
 
@@ -150,6 +138,8 @@ meaningful way).
 *CouchDB builder* utilizes [json-stable-stringify] instead of [JSON.stringify],
 to ensure that its output is idempotent (always the same, given the same input).
 
+[json-stable-stringify]: https://github.com/substack/json-stable-stringify
+
 ### Unsupported features
 
 The following features of [couchdb-compile] are not currently supported. Please
@@ -164,5 +154,4 @@ open an issue if further discussion is warranted:
 <!-- References -->
 
 [couchdb-compile]: https://github.com/jo/couchdb-compile
-[json-stable-stringify]: https://github.com/substack/json-stable-stringify
 [json.stringify]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
