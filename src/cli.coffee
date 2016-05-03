@@ -1,3 +1,5 @@
+jsonStringify = require 'json-stable-stringify'
+
 module.exports = (_process, _console, builder = require '.') ->
     argv = _process.argv.slice 2
 
@@ -8,6 +10,6 @@ module.exports = (_process, _console, builder = require '.') ->
 
     return builder.build argv[0]
     .then (result) ->
-        return _console.log JSON.stringify result, null, 2
+        return _console.log jsonStringify result, space: 2
     .catch (error) ->
         return _console.error error.toString()
