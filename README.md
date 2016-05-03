@@ -35,6 +35,43 @@ formats, and builds a JSON document suitable for use with CouchDB. The most
 common application is for CouchDB design documents, that typically contain
 embedded code.
 
+## Usage
+
+### Command line usage
+
+    couchdb-builder <source-path> > <destination-path>
+
+### Module usage
+
+*CouchDB builder* implements a [promise]-based interface:
+
+```js
+var couchdbBuilder = require('couchdb-builder');
+var fs = require('fs');
+var jsonStringify = require('json-stable-stringify');
+
+couchdbBuilder.build(sourcePath).then(
+    function (result) {
+        fs.writeFile(
+            targetPath,
+            jsonStringify(result) + "\n",
+            function (e) {
+                console.error('Error writing file: ' + e);
+            }
+        );
+    },
+    function (e) {
+        console.error('Error building document: ' + e);
+    }
+);
+```
+
+Note that [json-stable-stringify] is used instead of [JSON.stringify] to ensure
+idempotent output, which helps reduce diff churn when the build product is
+committed to a version control repository.
+
+[promise]: https://promisesaplus.com/
+
 ## Differences to [couchdb-compile]
 
 ### Better support for CommonJS modules
@@ -102,6 +139,17 @@ once (it also simplifies the wrapper code).
 
 [pull request]: https://github.com/jo/couchdb-compile/pull/29
 
+### Idempotent output
+
+When generating JSON output, [couchdb-compile] internally uses [JSON.stringify],
+which does not guarantee the order of properties in the output. If the resulting
+JSON is committed to a version control repository, this will sometimes produce
+"diff churn" (repeated commits to a file that do not change its content in a
+meaningful way).
+
+*CouchDB builder* utilizes [json-stable-stringify] instead of [JSON.stringify],
+to ensure that its output is idempotent (always the same, given the same input).
+
 ### Unsupported features
 
 The following features of [couchdb-compile] are not currently supported. Please
@@ -113,4 +161,8 @@ open an issue if further discussion is warranted:
 - Special treatment of `index.js` or `index.coffee` files as CommonJS modules.
   All `.js` and `.coffee` files are treated as modules in *CouchDB builder*.
 
+<!-- References -->
+
 [couchdb-compile]: https://github.com/jo/couchdb-compile
+[json-stable-stringify]: https://github.com/substack/json-stable-stringify
+[json.stringify]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
