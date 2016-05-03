@@ -6,8 +6,8 @@
 [![Current build status image][build-image]][current build status]
 [![Current coverage status image][coverage-image]][current coverage status]
 
-[build-image]: http://img.shields.io/travis/eloquent/couchdb-builder/develop.svg?style=flat-square "Current build status for the develop branch"
-[coverage-image]: https://img.shields.io/codecov/c/github/eloquent/couchdb-builder/develop.svg?style=flat-square "Current test coverage for the develop branch"
+[build-image]: http://img.shields.io/travis/eloquent/couchdb-builder/master.svg?style=flat-square "Current build status for the master branch"
+[coverage-image]: https://img.shields.io/codecov/c/github/eloquent/couchdb-builder/master.svg?style=flat-square "Current test coverage for the master branch"
 [current build status]: https://travis-ci.org/eloquent/couchdb-builder
 [current coverage status]: https://codecov.io/github/eloquent/couchdb-builder
 [current version]: https://www.npmjs.com/package/couchdb-builder

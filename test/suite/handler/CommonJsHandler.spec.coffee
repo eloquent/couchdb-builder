@@ -30,7 +30,7 @@ describe 'CommonJsHandler', ->
 
     it 'produces code that will work as a CouchDB view function', ->
         return @subject.handleFile @filePath
-        .then (actual) =>
+        .then (actual) ->
             actual = eval actual[1]
 
             assert.isFunction actual
