@@ -71,7 +71,7 @@ Extension | Type
 .coffee   | CommonJS module (CoffeeScript)
 .json     | JSON document
 .txt      | text document
-*<none>*  | text document
+*\<none>* | text document
 
 ## Example document
 
