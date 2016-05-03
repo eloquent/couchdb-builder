@@ -60,6 +60,104 @@ couchdbBuilder.build(sourcePath).then(
 
 [promise]: https://promisesaplus.com/
 
+## Supported file types
+
+*CouchDB builder* supports various file types. The type is determined solely
+from the extension, and files with unsupported extensions are ignored:
+
+Extension | Type
+----------|-------------------------------
+.js       | CommonJS module (JavaScript)
+.coffee   | CommonJS module (CoffeeScript)
+.json     | JSON document
+.txt      | text document
+*<none>*  | text document
+
+## Example document
+
+Given the following directory structure and file contents:
+
+**Directory**:
+
+    .
+    ├── a/
+    │   ├── b
+    │   ├── c.txt
+    │   ├── d.json
+    │   └── e.other
+    └── views/
+        ├── view-a/
+        │   └── map.js
+        └── view-b/
+            └── map.coffee
+
+*a/b*:
+
+```
+String content A.
+```
+
+*a/c.txt*:
+
+```
+String content B.
+```
+
+*a/d.json*:
+
+```json
+{
+    "f": true,
+    "g": 1.1
+}
+```
+
+*a/e.other*:
+
+```
+Ignored
+```
+
+*views/view-a/map.js*:
+
+```js
+module.exports = function (doc) {
+    emit(doc._id);
+};
+```
+
+*views/view-b/map.coffee*:
+
+```coffee
+module.exports = (doc) ->
+    emit doc._id
+
+    return
+```
+
+*CouchDB builder* will produce a document like the following:
+
+```json
+{
+    "a": {
+        "b": "String content A.",
+        "c": "String content B.",
+        "d": {
+            "f": true,
+            "g": 1.1
+        }
+    },
+    "views": {
+        "view-a": {
+            "map": "<source of map.js with wrapper>"
+        },
+        "view-a": {
+            "map": "<compiled source of map.coffee with wrapper>"
+        }
+    }
+}
+```
+
 ## Differences to [couchdb-compile]
 
 ### Better support for CommonJS modules
