@@ -1,3 +1,7 @@
+> # No longer maintained
+>
+> This package is no longer maintained.
+
 # CouchDB builder
 
 *A tool for building CouchDB documents from flat files.*
